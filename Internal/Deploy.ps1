@@ -201,7 +201,13 @@ try {
                     $replace = "`$1$($originalOwnerAndRepo."$_")`$2$originalBranch`$3"
                     Write-Host "regex: $regex"
                     Write-Host "replace: $replace"
-                    $lines = $lines | ForEach-Object { $_ -replace $regex, $replace }
+                    $lines = $lines | ForEach-Object {
+                        $newline = $_ -replace $regex, $replace
+                        if ($_ -ne $newline) {
+                            Write-Host "from:  $_"
+                            Write-Host "to:    $newline"                            
+                        }
+                    }
                 }
                 $lines -join "`n" | Set-Content $srcFile -Force -NoNewline
             }
