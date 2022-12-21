@@ -197,7 +197,7 @@ try {
                 Write-Host "$dstFile -> $srcFile"
                 $lines = ([string](Get-Content -Raw -path $dstFile)).Split("`n")
                 "actionsRepo","perTenantExtensionRepo","appSourceAppRepo" | ForEach-Object {
-                    $regex = "^(.*)$($config.githubOwner)/$($config."$_")(.*)$($config.branch)(.*)$"
+                    $regex = "^(.*)$($config.githubOwner)\/$($config."$_")(.*)$($config.branch)(.*)$"
                     $replace = "`$1$($originalOwnerAndRepo."$_")`$2$originalBranch`$3"
                     Write-Host "regex: $regex"
                     Write-Host "replace: $replace"
@@ -207,6 +207,7 @@ try {
                             Write-Host "from:  $_"
                             Write-Host "to:    $newline"                            
                         }
+                        $newline
                     }
                 }
                 $lines -join "`n" | Set-Content $srcFile -Force -NoNewline
