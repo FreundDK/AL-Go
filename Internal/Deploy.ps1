@@ -201,6 +201,7 @@ try {
                     $replace = "`$1$($originalOwnerAndRepo."$_")`$2$originalBranch`$3"
                     Write-Host "regex: $regex"
                     Write-Host "replace: $replace"
+                    $lines.Count | Out-Host
                     $lines = $lines | ForEach-Object {
                         $newline = $_ -replace $regex, $replace
                         if ($_ -ne $newline) {
@@ -208,6 +209,7 @@ try {
                             Write-Host "to:    $newline"                            
                         }
                         $newline
+                        Write-Host $newline
                     }
                 }
                 $lines -join "`n" | Set-Content $srcFile -Force -NoNewline
