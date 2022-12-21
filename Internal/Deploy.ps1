@@ -199,6 +199,8 @@ try {
                 "actionsRepo","perTenantExtensionRepo","appSourceAppRepo" | ForEach-Object {
                     $regex = "^(.*)$($config.githubOwner)/$($config."$_")(.*)$($config.branch)(.*)$"
                     $replace = "`$1$($originalOwnerAndRepo."$_")`$2$originalBranch`$3"
+                    Write-Host "regex: $regex"
+                    Write-Host "replace: $replace"
                     $lines = $lines | ForEach-Object { $_ -replace $regex, $replace }
                 }
                 $lines -join "`n" | Set-Content $srcFile -Force -NoNewline
