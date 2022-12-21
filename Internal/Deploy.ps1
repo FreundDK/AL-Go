@@ -209,6 +209,7 @@ try {
                             Write-Host "from:  $_"
                             Write-Host "to:    $newline"                            
                         }
+                        $newline
                     }
                 }
                 $lines -join "`n" | Set-Content $srcFile -Force -NoNewline
