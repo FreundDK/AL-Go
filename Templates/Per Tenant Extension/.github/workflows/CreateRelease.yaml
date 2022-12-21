@@ -60,20 +60,20 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: microsoft/AL-Go-Actions/WorkflowInitialize@main
+        uses: FreundDK/AL-Go-Actions/WorkflowInitialize@main
         with:
           eventId: "DO0094"
 
       - name: Read settings
         id: ReadSettings
-        uses: microsoft/AL-Go-Actions/ReadSettings@main
+        uses: FreundDK/AL-Go-Actions/ReadSettings@main
         with:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           get: TemplateUrl,RepoName
           getProjects: 'Y'
 
       - name: Check for updates to AL-Go system files
-        uses: microsoft/AL-Go-Actions/CheckForUpdates@main
+        uses: FreundDK/AL-Go-Actions/CheckForUpdates@main
         with:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           templateUrl: ${{ env.TemplateUrl }}
@@ -157,7 +157,7 @@ jobs:
 
       - name: Prepare release notes
         id: createreleasenotes
-        uses: microsoft/AL-Go-Actions/CreateReleaseNotes@main
+        uses: FreundDK/AL-Go-Actions/CreateReleaseNotes@main
         with:
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
           tag_name: ${{ github.event.inputs.tag }}
@@ -197,12 +197,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Read settings
-        uses: microsoft/AL-Go-Actions/ReadSettings@main
+        uses: FreundDK/AL-Go-Actions/ReadSettings@main
         with:
           parentTelemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
 
       - name: Read secrets
-        uses: microsoft/AL-Go-Actions/ReadSecrets@main
+        uses: FreundDK/AL-Go-Actions/ReadSecrets@main
         env:
           secrets: ${{ toJson(secrets) }}
         with:
@@ -251,7 +251,7 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetContext=$nuGetContext"
 
       - name: Deliver to NuGet
-        uses: microsoft/AL-Go-Actions/Deliver@main
+        uses: FreundDK/AL-Go-Actions/Deliver@main
         if: ${{ steps.nuGetContext.outputs.nuGetContext }}
         env:
           deliveryContext: ${{ steps.nuGetContext.outputs.nuGetContext }}
@@ -274,7 +274,7 @@ jobs:
           Add-Content -Path $env:GITHUB_OUTPUT -Value "storageContext=$storageContext"
 
       - name: Deliver to Storage
-        uses: microsoft/AL-Go-Actions/Deliver@main
+        uses: FreundDK/AL-Go-Actions/Deliver@main
         if: ${{ steps.storageContext.outputs.storageContext }}
         env:
           deliveryContext: ${{ steps.storageContext.outputs.storageContext }}
@@ -308,7 +308,7 @@ jobs:
     needs: [ CreateRelease, UploadArtifacts ]
     steps:
       - name: Update Version Number
-        uses: microsoft/AL-Go-Actions/IncrementVersionNumber@main
+        uses: FreundDK/AL-Go-Actions/IncrementVersionNumber@main
         with:
           parentTelemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
           versionNumber: ${{ github.event.inputs.updateVersionNumber }}
@@ -324,7 +324,7 @@ jobs:
 
       - name: Finalize the workflow
         id: PostProcess
-        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@main
+        uses: FreundDK/AL-Go-Actions/WorkflowPostProcess@main
         with:
           eventId: "DO0094"
           telemetryScopeJson: ${{ needs.CreateRelease.outputs.telemetryScopeJson }}
