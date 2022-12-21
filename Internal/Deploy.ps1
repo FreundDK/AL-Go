@@ -203,6 +203,7 @@ try {
                     Write-Host "replace: $replace"
                     $lines.Count | Out-Host
                     $lines = $lines | ForEach-Object {
+                        Write-Host $_
                         $newline = $_ -replace $regex, $replace
                         if ($_ -ne $newline) {
                             Write-Host "from:  $_"
