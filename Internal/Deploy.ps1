@@ -143,12 +143,14 @@ try {
             if (Test-Path $_) {
                 Set-Location $_
                 invoke-git pull
-                Set-Location $baseFolder
             }
             else {
                 $serverUrl = "https://github.com/$($config.githubOwner)/$_.git"
                 invoke-git clone --quiet $serverUrl
+                Set-Location $_
             }
+            invoke-git checkout $config.branch
+            Set-Location $baseFolder
         }
         else {
             if (Test-Path $_) {
@@ -199,18 +201,14 @@ try {
                 "actionsRepo","perTenantExtensionRepo","appSourceAppRepo" | ForEach-Object {
                     $regex = "^(.*)$($config.githubOwner)\/$($config."$_")(.*)$($config.branch)(.*)$"
                     $replace = "`$1$($originalOwnerAndRepo."$_")`$2$originalBranch`$3"
-                    Write-Host "regex: $regex"
-                    Write-Host "replace: $replace"
-                    $lines.Count | Out-Host
+#                    Write-Host "regex: $regex"
+#                    Write-Host "replace: $replace"
                     $lines = $lines | ForEach-Object {
-                        Write-Host $_
                         $newline = $_ -replace $regex, $replace
                         if ($_ -ne $newline) {
                             Write-Host "from:  $_"
                             Write-Host "to:    $newline"                            
                         }
-                        $newline
-                        Write-Host $newline
                     }
                 }
                 $lines -join "`n" | Set-Content $srcFile -Force -NoNewline
